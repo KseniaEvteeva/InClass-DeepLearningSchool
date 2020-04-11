@@ -1,0 +1,28 @@
+'''
+Задача: найти минимум функций с помощью градиентного спуска. 
+Вход: функция func с единственным, глобальным минимумом, ее производная deriv, а также начальная точка start.
+Выход: точка локального минимума.
+'''
+import numpy as np
+
+def grad_descent(func, deriv, start=None, callback=None):
+    if start is None:
+        np.random.seed(179)
+        start = np.random.randn()
+    estimate = start
+    precision = 0.0001
+    learning_rate = 0.1
+    max_steps = 10000
+    step = 0
+    previous_step_size = 1
+    while previous_step_size>precision and step<max_steps:
+        prev_x = estimate
+        estimate = estimate - learning_rate*deriv(prev_x)
+        previous_step_size = abs(estimate - prev_x)
+        if deriv(estimate)>deriv(prev_x):
+            learning_rate = learning_rate-learning_rate/100
+            prev_x = estimate
+            estimate = estimate - learning_rate*deriv(prev_x)
+            previous_step_size = abs(estimate - prev_x)
+        step +=1
+    return estimate
